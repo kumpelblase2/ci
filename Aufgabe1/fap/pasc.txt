@@ -1,0 +1,11 @@
+PROGRAM
+integer bla, blub2, xyz;
+string foo, bar;
+BEGIN
+a := 12.2;
+while (a < b)
+do
+x := 2 + x;
+read(foobar);
+od
+END.
