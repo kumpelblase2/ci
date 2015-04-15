@@ -140,14 +140,14 @@ multi	:	bracket_expr ((MULT_OP|DIV_OP) bracket_expr)*
 	
 bracket_expr
 	:	BRACKET_OPEN addition BRACKET_CLOSE
-	|	arithm_constant;
+	|	(ID | arithm_constant);
 
 comparison
 	:	(ID | arithm_variable) COMPARE_OPERATOR (ID | arithm_variable)
 	;
 	
 if_clause
-	:	IF_KEY comparison THEN_KEY statement+ (ELSE_KEY statement+) IF_END_KEY
+	:	IF_KEY comparison THEN_KEY statement+ (ELSE_KEY statement+)? IF_END_KEY
 	;
 	
 while_clause
@@ -157,8 +157,11 @@ while_clause
 definition
 	:	ID DEFINE_OPERATOR ( STRING | expr | comparison );
 
+function_call
+	:	print | read;
+
 statement
-	:	(print | read | if_clause | while_clause | definition) STATEMENT_END NL?;
+	:	(((function_call | definition) STATEMENT_END) | (if_clause | while_clause)) NL?;
 
 
 // MAIN PROGRAM RULE

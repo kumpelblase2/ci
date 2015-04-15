@@ -1,11 +1,21 @@
-PROGRAM
+program
 integer bla, blub2, xyz;
 string foo, bar;
-BEGIN
+boolean a;
+begin
 a := 12.2;
-while (a < b)
+while a < b
 do
 x := 2 + x;
 read(foobar);
 od
-END.
+if a = true then
+println('HALLO');
+fi
+
+if bla = 12 then
+print('testing');
+else
+print('do nothing');
+fi
+end
