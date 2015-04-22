@@ -1,0 +1,28 @@
+program
+	integer bla, blub2, xyz;
+	string foo, bar;
+	string foo2;
+	boolean a;
+begin
+	a := 12.2;
+	while a < 12
+	do
+		if a > 2 then
+			x := 2 + x;
+			while 1 = 2
+			do
+				a := 1 + 1;
+			od
+		fi
+		read(foobar);
+	od
+	if a = true then
+		println('HALLO');
+	fi
+
+	if bla = 12 then
+		print('testing');
+	else
+		print('do nothing');
+	fi
+end
