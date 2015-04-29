@@ -2,7 +2,8 @@ grammar minip;
 
 options {  
   output=AST; 
-}  
+  ASTLabelType=CommonTree;
+}
 
 tokens {
 	STATEMENTS;
@@ -10,6 +11,7 @@ tokens {
 	DEFINITION;
 	TEST;
 	FUNCTION;
+	DECLARATION;
 }
 
 /*
@@ -124,14 +126,15 @@ SIGN 	:	PLUS|NEGATIVE;
 /*
 	PARSER RULES
 */
-    
-idlist	:	(ID LIST_SEPARATOR!)* ID;
+idDeclaration[Token type]
+	:	ID -> ^(DECLARATION {type} ID);
     
 declaration
-	:	TYPE idlist STATEMENT_END NL? -> ^(TYPE idlist);
+	:	t=TYPE decs+=idDeclaration[$t] (LIST_SEPARATOR decs+=idDeclaration[$t])* STATEMENT_END NL? -> $decs*;
 	
 declarations
 	:	(declaration)* -> ^(DECLARATIONS declaration*);
+	
 
 print	:	PRINT_KEY BRACKET_OPEN (
 			STRING -> ^(FUNCTION ^(PRINT_KEY STRING))
@@ -145,7 +148,7 @@ arithm_constant
 
 arithm_variable
 	:	arithm_constant
-	|	(NEGATIVE)? BRACKET_OPEN arithm_constant BRACKET_CLOSE -> ^(NEGATIVE? arithm_constant)
+	|	(NEGATIVE)? BRACKET_OPEN arithm_constant BRACKET_CLOSE -> ^(NEGATIVE arithm_constant)
 	;
 
 expr	:	addition;
