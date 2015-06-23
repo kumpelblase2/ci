@@ -66,14 +66,20 @@ public class CSolver {
 
 
 sum(number1, number2, number3) ::= <<
-<number1.characters, number2.characters, number3.characters :
-  {n1, n2, n3 |	carry = makeIntVar("u" + index++, 0, 1, Options.V_ENUM);
+<createConstraint(last(number1),last(number2),last(number3))>
+<if(trunc(number1))>
+<sum(trunc(number1),trunc(number2),trungc(number3))>
+<endif>
+model.addConstraint(eq(ZERO, carry));
+prevCarry = ZERO;
+>>
+
+createConstraint(number1, number2, number3) ::= <<
+carry = makeIntVar("u" + index++, 0, 1, Options.V_ENUM);
 model.addConstraint(eq(plus(plus(<if(n1)><n1><else>ZERO<endif>, <if(n2)><n2><else>ZERO<endif>), prevCarry), plus(<if(n3)><n3><else>ZERO<endif>, mult(carry, 10))));
 <if(n1)>used.add(<n1>);<endif>
 <if(n2)>used.add(<n2>);<endif>
 <if(n3)>used.add(<n3>);<endif>
 System.out.println(carry);
-prevCarry = carry;}
-  ; separator="\n">
-prevCarry = ZERO;
+prevCarry = carry;
 >>

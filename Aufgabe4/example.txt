@@ -3,3 +3,7 @@ ABC + DDE =  FCF
 CB + BGE =  BCA
 =     =      =
 AEE + CBG = DGAE
+
+
+DDE - BGE = CBG
+               CBG + BGE = DDE
