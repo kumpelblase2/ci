@@ -1,5 +1,4 @@
 group template;
-
 sums(symbols,sums) ::= <<
 import choco.Options;
 import choco.cp.model.CPModel;
@@ -10,13 +9,9 @@ import choco.kernel.model.variables.integer.IntegerVariable;
 import choco.kernel.solver.Solver;
 import java.util.HashSet;
 import java.util.Set;
-
-
 public class CSolver {
-
 	public static void main(String[] args) {
 		Model model = new CPModel();
-	
 		IntegerVariable A = makeIntVar("a", 0, 9, Options.V_ENUM);
 		IntegerVariable B = makeIntVar("b", 0, 9, Options.V_ENUM);
 		IntegerVariable C = makeIntVar("c", 0, 9, Options.V_ENUM);
@@ -43,16 +38,12 @@ public class CSolver {
 		IntegerVariable X = makeIntVar("x", 0, 9, Options.V_ENUM);
 		IntegerVariable Y = makeIntVar("y", 0, 9, Options.V_ENUM);
 		IntegerVariable Z = makeIntVar("z", 0, 9, Options.V_ENUM);
-		
-		IntegerVariable ZERO = makeIntVar("ZERO", 0, 0, Options.V_ENUM);	
+		IntegerVariable ZERO = makeIntVar("ZERO", 0, 0, Options.V_ENUM);
 		Set\<IntegerVariable\> used = new HashSet\<IntegerVariable\>();
-		
 		IntegerVariable prevCarry = ZERO;
 		IntegerVariable carry;
 		int index = 0;
-	
 		<sums>
-		
 		model.addConstraint(allDifferent(used.toArray(new IntegerVariable[used.size()])));
 		Solver s = new CPSolver();
 		s.read(model);
@@ -64,22 +55,26 @@ public class CSolver {
 }
 ;separator="\n">>
 
-
 sum(number1, number2, number3) ::= <<
-<createConstraint(last(number1),last(number2),last(number3))>
-<if(trunc(number1))>
-<sum(trunc(number1),trunc(number2),trungc(number3))>
-<endif>
-model.addConstraint(eq(ZERO, carry));
-prevCarry = ZERO;
+<number1, number2, number3 : { n1, n2, n3 |
+	<sum2(number1=n1.characters,number2=n2.characters,number3=n3.characters)>
+	model.addConstraint(eq(ZERO, carry));
+	prevCarry = ZERO;
+}>
 >>
 
-createConstraint(number1, number2, number3) ::= <<
+sum2(number1, number2, number3) ::= <<
+<createConstraint(n1=last(number1),n2=last(number2),n3=last(number3))>
+<if(rest(number3))>
+<sum2(number1=trunc(number1),number2=trunc(number2),number3=trunc(number3))>
+<endif>
+>>
+
+createConstraint(n1, n2, n3) ::= <<
 carry = makeIntVar("u" + index++, 0, 1, Options.V_ENUM);
 model.addConstraint(eq(plus(plus(<if(n1)><n1><else>ZERO<endif>, <if(n2)><n2><else>ZERO<endif>), prevCarry), plus(<if(n3)><n3><else>ZERO<endif>, mult(carry, 10))));
 <if(n1)>used.add(<n1>);<endif>
 <if(n2)>used.add(<n2>);<endif>
 <if(n3)>used.add(<n3>);<endif>
-System.out.println(carry);
 prevCarry = carry;
 >>
